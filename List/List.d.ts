@@ -56,6 +56,14 @@ export interface List<E> {
   add(element: E): boolean;
 
   /**
+   * Inserts the specified element at the specified position in this list.
+   * @param index index at which the specified element is to be inserted
+   * @param element element to be inserted
+   * @throws RangeError if the index is out of range
+   */
+  add(index: number, element: E): void;
+
+  /**
    * Removes the first occurrence of the specified element from this list, if it is present.
    * @param element element to be removed from this list, if present
    * @returns true if this list contained the specified element
@@ -132,14 +140,6 @@ export interface List<E> {
    * @throws RangeError if the index is out of range
    */
   set(index: number, element: E): E;
-
-  /**
-   * Inserts the specified element at the specified position in this list.
-   * @param index index at which the specified element is to be inserted
-   * @param element element to be inserted
-   * @throws RangeError if the index is out of range
-   */
-  add(index: number, element: E): void;
 
   // Search Operations
 
