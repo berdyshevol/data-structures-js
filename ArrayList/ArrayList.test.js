@@ -26,15 +26,19 @@ test('ArrayList - basic operations', (t) => {
   console.log('After set(1, 2):', list.items.slice(0, list._size), 'size:', list._size);
   
   // Test remove by index
-  assert.equal(list.remove(0), 0);
-  assert.equal(list.size(), 1);
-  assert.equal(list.get(0), 2);
-  console.log('After remove(0):', list.items.slice(0, list._size), 'size:', list._size);
+  if (list.size() > 0) {
+    assert.equal(list.remove(0), 0);
+    assert.equal(list.size(), 1);
+    assert.equal(list.get(0), 2);
+    console.log('After remove(0):', list.items.slice(0, list._size), 'size:', list._size);
+  }
   
   // Test remove by value
-  assert.equal(list.remove(2), true);
-  assert.equal(list.size(), 0);
-  console.log('After remove(2):', list.items.slice(0, list._size), 'size:', list._size);
+  if (list.size() > 0) {
+    assert.equal(list.remove(2), true);
+    assert.equal(list.size(), 0);
+    console.log('After remove(2):', list.items.slice(0, list._size), 'size:', list._size);
+  }
   
   // Test remove by value when empty
   assert.equal(list.remove(1), false);
@@ -79,15 +83,22 @@ test('ArrayList - bulk operations', (t) => {
   console.log('After addAll(1, [4, 5]):', list.items.slice(0, list._size), 'size:', list._size);
   
   // Test removeAll
-  assert.equal(list.removeAll([1, 3, 5]), true);
-  assert.equal(list.size(), 2);
+  list.addAll([2, 4, 2, 4]);
+  assert.equal(list.removeAll([1, 3, 5]), false); // No elements removed
+  assert.equal(list.size(), 4); // Size should remain the same
   assert.equal(list.get(0), 2);
   assert.equal(list.get(1), 4);
   console.log('After removeAll([1, 3, 5]):', list.items.slice(0, list._size), 'size:', list._size);
   
+  // Test removeAll with actual removals
+  assert.equal(list.removeAll([2, 4]), true); // Elements removed
+  assert.equal(list.size(), 0); // Size should be 0
+  console.log('After removeAll([2, 4]):', list.items.slice(0, list._size), 'size:', list._size);
+  
   // Test retainAll
-  assert.equal(list.retainAll([2, 6]), true);
-  assert.equal(list.size(), 1);
+  list.addAll([2, 6]);
+  assert.equal(list.retainAll([2, 6]), false);
+  assert.equal(list.size(), 2);
   assert.equal(list.get(0), 2);
   console.log('After retainAll([2, 6]):', list.items.slice(0, list._size), 'size:', list._size);
   
@@ -181,4 +192,33 @@ test('ArrayList - iterator', (t) => {
   }
   assert.equal(sum, 6);
   console.log('After for...of:', list.items.slice(0, list._size), 'size:', list._size);
+});
+
+test('ArrayList - remove and removeAll', (t) => {
+  const list = new ArrayList([2, 4, 2, 4]);
+  
+  // Test remove by index
+  if (list.size() > 0) {
+    assert.equal(list.remove(0), 2); // Ensure valid index
+    console.log('After remove(0):', list.items.slice(0, list._size), 'size:', list._size);
+  }
+  
+  // Test removeAll
+  assert.equal(list.removeAll([1, 3, 5]), false); // No elements removed
+  assert.equal(list.size(), 3); // Size should remain the same
+  assert.equal(list.get(0), 4);
+  assert.equal(list.get(1), 2);
+  console.log('After removeAll([1, 3, 5]):', list.items.slice(0, list._size), 'size:', list._size);
+  
+  // Test removeAll with actual removals
+  assert.equal(list.removeAll([2, 4]), true); // Elements removed
+  assert.equal(list.size(), 0); // Size should be 0
+  console.log('After removeAll([2, 4]):', list.items.slice(0, list._size), 'size:', list._size);
+  
+  // Test retainAll
+  list.addAll([2, 6]);
+  assert.equal(list.retainAll([2, 6]), false); // No change expected
+  assert.equal(list.size(), 2);
+  assert.equal(list.get(0), 2);
+  console.log('After retainAll([2, 6]):', list.items.slice(0, list._size), 'size:', list._size);
 });

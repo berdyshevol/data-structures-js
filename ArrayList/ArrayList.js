@@ -60,11 +60,8 @@ class ArrayList {
 
   // Remove element either by index or by value
   remove(indexOrElement) {
-    if (typeof indexOrElement === 'number') {
-      // remove(index) overload
-      if (indexOrElement < 0 || indexOrElement >= this._size) {
-        throw new RangeError('Index out of bounds');
-      }
+    // If the argument is a number and is a valid index, remove by index
+    if (typeof indexOrElement === 'number' && indexOrElement >= 0 && indexOrElement < this._size) {
       const removed = this.items[indexOrElement];
       // Shift elements left
       for (let i = indexOrElement; i < this._size - 1; i++) {
@@ -74,21 +71,12 @@ class ArrayList {
       this._size--;
       return removed;
     } else {
-      // remove(element) overload
-      if (this._size === 0) {
-        return false;
-      }
+      // Otherwise, treat as removal by value
       const index = this.indexOf(indexOrElement);
       if (index === -1) {
         return false;
       }
-      const removed = this.items[index];
-      // Shift elements left
-      for (let i = index; i < this._size - 1; i++) {
-        this.items[i] = this.items[i + 1];
-      }
-      this.items[this._size - 1] = undefined;
-      this._size--;
+      this.remove(index);
       return true;
     }
   }
