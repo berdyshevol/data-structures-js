@@ -1,5 +1,16 @@
-export declare class ArrayList<T> {
+import { List } from '../List/List';
+
+export declare class ArrayList<T> implements List<T> {
   private items: T[];
+  private _capacity: number;
+  private _size: number;
+  
+  /**
+   * Constructs an empty list with an initial capacity of ten or
+   * a list containing the elements of the specified collection.
+   * @param items Optional initial elements
+   */
+  constructor(items?: Iterable<T>);
 
   // Basic Operations
   add(element: T): boolean;                     // returns true (always)
@@ -31,7 +42,7 @@ export declare class ArrayList<T> {
   // List Views
   subList(fromIndex: number, toIndex: number): ArrayList<T>; // view of portion of list
 
-  // Capacity Operations
+  // Capacity Operations (ArrayList specific)
   ensureCapacity(minCapacity: number): void;              // ensures internal array has at least this capacity
   trimToSize(): void;                                     // trims internal array to size
 
@@ -42,4 +53,8 @@ export declare class ArrayList<T> {
 
   // Iterator Operations
   [Symbol.iterator](): Iterator<T>;                       // makes ArrayList iterable
+  
+  // Private helper methods
+  private _grow(): void;
+  private _isIterable(obj: any): boolean;
 }
